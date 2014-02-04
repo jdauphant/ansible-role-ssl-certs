@@ -1,0 +1,13 @@
+---
+ - name: Ensure OpenSSL is installed
+   apt: name=openssl state=present
+   when: ansible_os_family == "Debian"
+   tags: [ssl-certs,packages]
+
+ - name: Ensure ssl folder exist
+   file: path={{ssl_certs_patch}} state=directory owner="{{ssl_certs_path_owner}}" group="{{ssl_certs_path_group}}" mode=700
+   tags: [ssl-certs,configuration]
+
+ - include: generate.yml
+   when: "ssl_certs_local_privkey_path is undefined or ssl_certs_local_cert_path is undefined"
+   tags: [ssl-certs,configuration]
