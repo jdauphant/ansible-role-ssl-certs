@@ -13,5 +13,5 @@ ssl_certs_path_group: "www-data"
 ssl_certs_privkey_path: "{{ssl_certs_patch}}/{{ssl_certs_common_name}}.key"
 ssl_certs_cert_path: "{{ssl_certs_patch}}/{{ssl_certs_common_name}}.pem"
 
-#ssl_certs_local_privkey_path: ''
-#ssl_certs_local_cert_path: ''
+ssl_certs_local_privkey_path: 'ssl/{{ssl_certs_common_name}}.key'
+ssl_certs_local_cert_path: 'ssl/{{ssl_certs_common_name}}.pem'
