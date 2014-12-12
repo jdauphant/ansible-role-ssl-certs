@@ -10,7 +10,9 @@ Generate and/or deploy SSL certificate
    roles: 
      - ssl-certs
 ```
-This will create /etc/ssl/myserver.mydomain.com.key and /etc/ssl/myserver.mydomain.com.pem
+This will create in
+- /etc/ssl/myserver.mydomain.com.key 
+- /etc/ssl/myserver.mydomain.com.pem
 
 
 ## Example to deploy a SSL certificate
@@ -21,7 +23,7 @@ This will create /etc/ssl/myserver.mydomain.com.key and /etc/ssl/myserver.mydoma
       ssl_certs_common_name: "example.com"
 ```
 The certificat have to be place in ssl/example.com.key and ssl/example.com.pem .
-If they don't exist they will be generated (self-signed).
+If they don't exist they will be generated (self-signed) as /etc/ssl/example.com.key  and /etc/ssl/example.com.com.key 
 
 
 ## Example 2 to deploy a SSL certificate by specified the local key/pem files path
