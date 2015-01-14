@@ -8,30 +8,29 @@
    file: path={{ssl_certs_patch}} state=directory owner="{{ssl_certs_path_owner}}" group="{{ssl_certs_path_group}}" mode=700
    tags: [ssl-certs,configuration]
 
- - stat: path={{inventory_dir}}/files/{{ssl_certs_local_privkey_path}}
+ - stat: path={{ssl_certs_local_privkey_path}}
    register: stat_privkey
    connection: local
    sudo: false
    tags: [ssl-certs,configuration]
 
- - stat: path={{inventory_dir}}/files/{{ssl_certs_local_cert_path}}
+ - stat: path={{ssl_certs_local_cert_path}}
    register: stat_cert
    connection: local
    sudo: false
    tags: [ssl-certs,configuration]
 
  - name: Test if privkey file is needed
-   fail: msg="Privkey file {{inventory_dir}}/files/{{ssl_certs_local_privkey_path}} is missing"
+   fail: msg="Privkey file {{ssl_certs_local_privkey_path}} is missing"
    when: not stat_privkey.stat.exists and stat_cert.stat.exists
    tags: [ssl-certs,configuration]
 
  - name: Test if cert file is needed
-   fail: msg="Cert file {{inventory_dir}}/files/{{ssl_certs_local_cert_path}} is missing"
+   fail: msg="Cert file {{ssl_certs_local_cert_path}} is missing"
    when: stat_privkey.stat.exists and not stat_cert.stat.exists
    tags: [ssl-certs,configuration]
 
- - name: Generate self-signed SSL certificate
-   command: "openssl req -new -nodes -x509 -subj '{{ssl_certs_fields}}' -days {{ssl_certs_days}} -keyout {{ssl_certs_privkey_path}} -out {{ssl_certs_cert_path}} -extensions v3_ca creates={{ssl_certs_cert_path}}"
+ - include: generate.yml
    when: not stat_privkey.stat.exists and not stat_cert.stat.exists
    tags: [ssl-certs,configuration]
 
@@ -39,6 +38,6 @@
    copy: src={{item.src}} dest={{item.dest}} owner="{{ssl_certs_path_owner}}" group="{{ssl_certs_path_group}}" mode=700
    when: stat_privkey.stat.exists and stat_cert.stat.exists
    with_items:
-       - { src: "{{inventory_dir}}/files/{{ssl_certs_local_cert_path}}", dest: "{{ssl_certs_cert_path}}" }
-       - { src: "{{inventory_dir}}/files/{{ssl_certs_local_privkey_path}}", dest: "{{ssl_certs_privkey_path}}" }
+       - { src: "{{ssl_certs_local_cert_path}}", dest: "{{ssl_certs_cert_path}}" }
+       - { src: "{{ssl_certs_local_privkey_path}}", dest: "{{ssl_certs_privkey_path}}" }
    tags: [ssl-certs,configuration]

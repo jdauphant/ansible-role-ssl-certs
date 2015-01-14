@@ -1,3 +1,8 @@
 ---
+ - name: Generate RSA key
+   command: openssl genrsa -out {{ssl_certs_privkey_path}} {{ssl_certs_key_size}} creates={{ssl_certs_privkey_path}}
+ - name: Generate CSR
+   command: openssl req -new -subj '{{ssl_certs_fields}}' -key {{ssl_certs_privkey_path}} -out {{ssl_certs_csr_path}} creates={{ssl_certs_csr_path}}
  - name: Generate self-signed SSL certificate
-   command: openssl req -new -nodes -x509 -subj '{{ssl_certs_fields}}' -days {{ssl_certs_days}} -keyout {{ssl_certs_privkey_path}} -out {{ssl_certs_cert_path}} -extensions v3_ca creates={{ssl_certs_cert_path}}
+   command: openssl req -nodes -x509 -days {{ssl_certs_days}} -in {{ssl_certs_csr_path}} -key {{ssl_certs_privkey_path}} -out {{ssl_certs_cert_path}} -extensions v3_ca creates={{ssl_certs_cert_path}}
+   when: ssl_certs_generate_self_signed
