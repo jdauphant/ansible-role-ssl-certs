@@ -3,12 +3,14 @@ ansible-role-ssl-certs
 
 Generate and/or deploy SSL certificate
 
+Available on Ansible galaxy : https://galaxy.ansible.com/list#/roles/3115
+
 # Examples
 ## Example to generate a SSL certificate (self-signed)
 ```
  - hosts: all
    roles: 
-     - ssl-certs
+     - jdauphant.ssl-certs
 ```
 This will create in
 - /etc/ssl/myserver.mydomain.com.key 
@@ -19,7 +21,7 @@ This will create in
 ```
  - hosts: all
    roles: 
-    - role: ssl-certs
+    - role: jdauphant.ssl-certs
       ssl_certs_common_name: "example.com"
 ```
 The certificat have to be place in ssl/example.com.key and ssl/example.com.pem .
@@ -30,7 +32,7 @@ If they don't exist they will be generated (self-signed) as /etc/ssl/example.com
 ```
  - hosts: all
    roles: 
-    - role: ssl-certs
+    - role: jdauphant.ssl-certs
       ssl_certs_local_privkey_path: 'files/key/example.com.key'
       ssl_certs_local_cert_path: 'files/pem/example.com.pem'
 ```
@@ -39,8 +41,8 @@ If they don't exist they will be generated (self-signed) as /etc/ssl/example.com
 ```
  - hosts: all
    roles: 
-     - ssl-certs
-     - role: nginx
+     - jdauphant.ssl-certs
+     - role: jdauphant.nginx
        nginx_configs: 
           ssl:
                - ssl_certificate_key {{ssl_certs_privkey_path}}
