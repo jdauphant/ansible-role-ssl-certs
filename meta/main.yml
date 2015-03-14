@@ -34,9 +34,9 @@ galaxy_info:
   #  - 12.3
   #  - 13.1
   #  - 13.2
-  #- name: GenericBSD
-  #  versions:
-  #  - all
+   - name: GenericBSD
+     versions:
+     - all
   #  - any
   #- name: FreeBSD
   #  versions:
