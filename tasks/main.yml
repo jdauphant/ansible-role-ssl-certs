@@ -8,15 +8,13 @@
    file: path={{ssl_certs_patch}} state=directory owner="{{ssl_certs_path_owner}}" group="{{ssl_certs_path_group}}" mode=700
    tags: [ssl-certs,configuration]
 
- - stat: path={{ssl_certs_local_privkey_path}}
+ - local_action: stat path={{ssl_certs_local_privkey_path}}
    register: stat_privkey
-   connection: local
    sudo: false
    tags: [ssl-certs,configuration]
 
- - stat: path={{ssl_certs_local_cert_path}}
+ - local_action: stat path={{ssl_certs_local_cert_path}}
    register: stat_cert
-   connection: local
    sudo: false
    tags: [ssl-certs,configuration]
 
