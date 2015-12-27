@@ -1,41 +1,68 @@
 ---
- - name: Ensure OpenSSL is installed
-   apt: name=openssl state=present
-   when: ansible_os_family == "Debian"
-   tags: [ssl-certs,packages]
+  - name: Ensure OpenSSL is installed
+    apt: name=openssl state=present
+    when: ansible_os_family == "Debian"
+    tags: [ssl-certs,packages]
 
- - name: Ensure ssl folder exist
-   file: path={{ssl_certs_patch}} state=directory owner="{{ssl_certs_path_owner}}" group="{{ssl_certs_path_group}}" mode=700
-   tags: [ssl-certs,configuration]
+  - name: Ensure ssl folder exist
+    file:
+      path: "{{ ssl_certs_patch }}"
+      state: directory
+      owner: "{{ ssl_certs_path_owner }}"
+      group: "{{ ssl_certs_path_group }}"
+      mode: "700"
+    tags: [ssl-certs,configuration]
 
- - local_action: stat path={{ssl_certs_local_privkey_path}}
-   register: stat_privkey
-   sudo: false
-   tags: [ssl-certs,configuration]
+  - local_action: stat path={{ ssl_certs_local_privkey_path }}
+    register: stat_privkey
+    sudo: false
+    tags: [ssl-certs,configuration]
 
- - local_action: stat path={{ssl_certs_local_cert_path}}
-   register: stat_cert
-   sudo: false
-   tags: [ssl-certs,configuration]
+  - local_action: stat path={{ ssl_certs_local_cert_path }}
+    register: stat_cert
+    sudo: false
+    tags: [ssl-certs,configuration]
 
- - name: Test if privkey file is needed
-   fail: msg="Privkey file {{ssl_certs_local_privkey_path}} is missing"
-   when: not stat_privkey.stat.exists and stat_cert.stat.exists
-   tags: [ssl-certs,configuration]
+  - name: Test if privkey file is needed
+    fail: msg="Privkey file {{ ssl_certs_local_privkey_path }} is missing"
+    when: not stat_privkey.stat.exists and stat_cert.stat.exists
+    tags: [ssl-certs,configuration]
 
- - name: Test if cert file is needed
-   fail: msg="Cert file {{ssl_certs_local_cert_path}} is missing"
-   when: stat_privkey.stat.exists and not stat_cert.stat.exists
-   tags: [ssl-certs,configuration]
+  - name: Test if cert file is needed
+    fail: msg="Cert file {{ ssl_certs_local_cert_path }} is missing"
+    when: stat_privkey.stat.exists and not stat_cert.stat.exists
+    tags: [ssl-certs,configuration]
 
- - include: generate.yml
-   when: not stat_privkey.stat.exists and not stat_cert.stat.exists
-   tags: [ssl-certs,configuration]
+  - include: generate.yml
+    when: >
+      ( not stat_privkey.stat.exists and not stat_cert.stat.exists )
+      and ( ssl_certs_local_privkey_data is undefined and ssl_certs_local_cert_data is undefined )
+    tags: [ssl-certs,configuration]
 
- - name: Copy SSL certificates
-   copy: src={{item.src}} dest={{item.dest}} owner="{{ssl_certs_path_owner}}" group="{{ssl_certs_path_group}}" mode=700
-   when: stat_privkey.stat.exists and stat_cert.stat.exists
-   with_items:
-       - { src: "{{ssl_certs_local_cert_path}}", dest: "{{ssl_certs_cert_path}}" }
-       - { src: "{{ssl_certs_local_privkey_path}}", dest: "{{ssl_certs_privkey_path}}" }
-   tags: [ssl-certs,configuration]
+  - name: Copy SSL certificates
+    copy:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      owner: "{{ ssl_certs_path_owner }}"
+      group: "{{ ssl_certs_path_group }}"
+      mode: "700"
+    when: >
+      ( stat_privkey.stat.exists and stat_cert.stat.exists )
+      and ( ssl_certs_local_privkey_data is undefined and ssl_certs_local_cert_data is undefined )
+    with_items:
+      - { src: "{{ ssl_certs_local_cert_path }}", dest: "{{ ssl_certs_cert_path }}" }
+      - { src: "{{ ssl_certs_local_privkey_path }}", dest: "{{ ssl_certs_privkey_path }}" }
+    tags: [ssl-certs,configuration]
+
+  - name: Copy SSL certificate data
+    template:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      owner: "{{ ssl_certs_path_owner }}"
+      group: "{{ ssl_certs_path_group }}"
+      mode: "700"
+    when: ssl_certs_local_privkey_data is defined and ssl_certs_local_cert_data is defined
+    with_items:
+      - { src: "cert.pem.j2", dest: "{{ ssl_certs_cert_path }}" }
+      - { src: "cert.key.j2", dest: "{{ ssl_certs_privkey_path }}" }
+    tags: [ssl-certs,configuration]
