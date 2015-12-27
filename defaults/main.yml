@@ -14,8 +14,8 @@ ssl_certs_privkey_path: "{{ssl_certs_patch}}/{{ssl_certs_common_name}}.key"
 ssl_certs_cert_path: "{{ssl_certs_patch}}/{{ssl_certs_common_name}}.pem"
 ssl_certs_csr_path: "{{ssl_certs_patch}}/{{ssl_certs_common_name}}.csr"
 
-ssl_certs_local_privkey_path: '{{inventory_dir|default(playbook_dir)}}/files/ssl/{{ssl_certs_common_name}}.key'
-ssl_certs_local_cert_path: '{{inventory_dir|default(playbook_dir)}}/files/ssl/{{ssl_certs_common_name}}.pem'
+ssl_certs_local_privkey_path: "{{inventory_dir|default(playbook_dir)}}/files/ssl/{{ssl_certs_common_name}}.key"
+ssl_certs_local_cert_path: "{{inventory_dir|default(playbook_dir)}}/files/ssl/{{ssl_certs_common_name}}.pem"
 
 ssl_certs_generate_self_signed: true
 ssl_certs_key_size: "2048"
