@@ -3,7 +3,7 @@ ansible-role-ssl-certs
 
 Generate and/or deploy SSL certificate
 
-Available on Ansible galaxy : https://galaxy.ansible.com/list#/roles/3115
+Available on Ansible Galaxy: [jdauphant.ssl-certs](https://galaxy.ansible.com/list#/roles/3115)
 
 # Examples
 
@@ -49,7 +49,8 @@ they don't exist, they will be generated as a **self-signed** certificate at
 An SSL certificate and key are just text that can be stored as a variable, which is useful when
 using ansible vault.
 
-Example variable data, note how the text blog is indented. This is needed to correctly insert the text via the template module.
+Example variable data, note how the text blob is indented. This is needed to correctly insert the
+text via the template module.
 
 ```YAML
 ssl_certs_local_privkey_data: |
@@ -68,7 +69,7 @@ ssl_certs_local_cert_data: |
 
 Then simply include the role as in the first example.
 
-## Example to use this role with my Nginx role ( https://github.com/jdauphant/ansible-role-nginx )
+## Example to use this role with my Nginx role: [jdauphant.nginx](https://github.com/jdauphant/ansible-role-nginx)
 
 ```YAML
  - hosts: all
