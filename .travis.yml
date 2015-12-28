@@ -7,6 +7,9 @@ before_install:
 install:
   - pip install ansible
 script:
-  - echo localhost > inventory
+  - echo travis.dev > inventory
   - ansible-playbook -i inventory --syntax-check --list-tasks test.yml
   - ansible-playbook -i inventory --connection=local --sudo -vvvv test.yml
+addons:
+  hosts:
+    - travis.dev
