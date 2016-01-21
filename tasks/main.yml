@@ -15,12 +15,12 @@
 
   - local_action: stat path={{ ssl_certs_local_privkey_path }}
     register: stat_privkey
-    sudo: false
+    become: no
     tags: [ssl-certs,configuration]
 
   - local_action: stat path={{ ssl_certs_local_cert_path }}
     register: stat_cert
-    sudo: false
+    become: no
     tags: [ssl-certs,configuration]
 
   - name: Test if privkey file is needed
