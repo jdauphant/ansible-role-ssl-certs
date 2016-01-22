@@ -6,7 +6,7 @@
 
   - name: Ensure ssl folder exist
     file:
-      path: "{{ ssl_certs_patch }}"
+      path: "{{ ssl_certs_path }}"
       state: directory
       owner: "{{ ssl_certs_path_owner }}"
       group: "{{ ssl_certs_path_group }}"
