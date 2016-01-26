@@ -67,3 +67,9 @@
       - { content: "{{ ssl_certs_local_privkey_data }}", dest: "{{ ssl_certs_privkey_path }}" }
     no_log: true
     tags: [ssl-certs,configuration]
+
+  - name: Generate strong DHE parameter - https://weakdh.org/
+    command: openssl dhparam -out {{ssl_certs_dhparam_path}} {{ssl_certs_dhparam_size}} creates={{ssl_certs_dhparam_path}}
+    when: ssl_certs_generate_dh_param
+    tags: [ssl-certs,configuration]
+

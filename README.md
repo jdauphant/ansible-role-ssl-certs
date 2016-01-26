@@ -75,11 +75,13 @@ Then simply include the role as in the first example.
  - hosts: all
    roles:
      - jdauphant.ssl-certs
+       ssl_certs_generate_dh_param: true
      - role: jdauphant.nginx
        nginx_configs:
           ssl:
                - ssl_certificate_key {{ssl_certs_privkey_path}}
                - ssl_certificate     {{ssl_certs_cert_path}}
+               - ssl_dhparam         {{ssl_certs_dhparam_path}}
        nginx_sites:
           default:
                - listen 443 ssl
