@@ -10,7 +10,7 @@
       state: directory
       owner: "{{ ssl_certs_path_owner }}"
       group: "{{ ssl_certs_path_group }}"
-      mode: "700"
+      mode: "{{ ssl_certs_mode }}"
     tags: [ssl-certs,configuration]
 
   - local_action: stat path={{ ssl_certs_local_privkey_path }}
@@ -45,7 +45,7 @@
       dest: "{{ item.dest }}"
       owner: "{{ ssl_certs_path_owner }}"
       group: "{{ ssl_certs_path_group }}"
-      mode: "700"
+      mode: "{{ ssl_certs_mode }}"
     when: >
       ( stat_privkey.stat.exists and stat_cert.stat.exists )
       and ( ssl_certs_local_privkey_data is undefined and ssl_certs_local_cert_data is undefined )
@@ -60,7 +60,7 @@
       dest: "{{ item.dest }}"
       owner: "{{ ssl_certs_path_owner }}"
       group: "{{ ssl_certs_path_group }}"
-      mode: "700"
+      mode: "{{ ssl_certs_mode }}"
     when: ssl_certs_local_privkey_data is defined and ssl_certs_local_cert_data is defined
     with_items:
       - { content: "{{ ssl_certs_local_cert_data }}", dest: "{{ ssl_certs_cert_path }}" }
