@@ -63,8 +63,8 @@
       mode: "{{ ssl_certs_mode }}"
     when: ssl_certs_local_privkey_data is defined and ssl_certs_local_cert_data is defined
     with_items:
-      - { content: "{{ ssl_certs_local_cert_data }}", dest: "{{ ssl_certs_cert_path }}" }
-      - { content: "{{ ssl_certs_local_privkey_data }}", dest: "{{ ssl_certs_privkey_path }}" }
+      - { content: "{{ ssl_certs_local_cert_data|default }}", dest: "{{ ssl_certs_cert_path }}" }
+      - { content: "{{ ssl_certs_local_privkey_data|default }}", dest: "{{ ssl_certs_privkey_path }}" }
     no_log: true
     tags: [ssl-certs,configuration]
 
