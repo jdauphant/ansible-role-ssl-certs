@@ -52,6 +52,7 @@
     with_items:
       - { src: "{{ ssl_certs_local_cert_path }}", dest: "{{ ssl_certs_cert_path }}" }
       - { src: "{{ ssl_certs_local_privkey_path }}", dest: "{{ ssl_certs_privkey_path }}" }
+    register: copy_result
     tags: [ssl-certs,configuration]
 
   - name: Copy SSL certificate data
@@ -66,6 +67,7 @@
       - { content: "{{ ssl_certs_local_cert_data|default }}", dest: "{{ ssl_certs_cert_path }}" }
       - { content: "{{ ssl_certs_local_privkey_data|default }}", dest: "{{ ssl_certs_privkey_path }}" }
     no_log: true
+    register: copy_data_result
     tags: [ssl-certs,configuration]
 
   - name: Generate strong DHE parameter - https://weakdh.org/
@@ -73,3 +75,11 @@
     when: ssl_certs_generate_dh_param
     tags: [ssl-certs,configuration]
 
+  - stat: path={{ ssl_certs_combined_path }}
+    register: stat_combined
+    tags: [ssl-certs,configuration]
+
+  - name: Combine key and cert
+    assemble: dest={{ ssl_certs_combined_path }} src={{ ssl_certs_path }} regexp='({{ ssl_certs_privkey_path | basename }}|{{ ssl_certs_cert_path | basename }})'
+    when: (not stat_combined.stat.exists) or generate_key_result|changed or generate_cert_result|changed or copy_result|changed or copy_data_result|changed
+    tags: [ssl-certs,configuration]
