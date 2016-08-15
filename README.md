@@ -30,8 +30,8 @@ This will create certificate and private key in:
 ```
 
 The certificate has to be placed in `files/ssl/example.com.key` and `files/ssl/example.com.pem`. If
-they don't exist, they will be generated as a **self-signed** certificate at
-`/etc/ssl/example.com.key` and `/etc/ssl/example.com.key` using the provided common name.
+they don't exist, the key and a **self-signed** certificate will be generated at
+`/etc/ssl/example.com/example.com.key` and `/etc/ssl/example.com/example.com.pem` using the provided common name.
 
 
 ## Example to deploy a SSL certificate using local key/pem files
