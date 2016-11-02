@@ -6,7 +6,7 @@
     file: path={{ ssl_certs_privkey_path }} owner={{ ssl_certs_path_owner }} group={{ ssl_certs_path_group }} mode={{ ssl_certs_mode }}
 
   - name: Generate CSR
-    command: openssl req -new -sha256 -subj "{{ ssl_certs_fields }}" -key {{ ssl_certs_privkey_path }} -out {{ ssl_certs_csr_path }} creates={{ ssl_certs_csr_path }}
+    command: openssl req -new -sha256 -subj "{{ ssl_certs_fields }}" -key {{ ssl_certs_privkey_path }} -out {{ ssl_certs_csr_path }}} -reqexts SAN -config <(cat /etc/ssl/openssl.cnf <(printf "[SAN]\nsubjectAltName={{ ssl_certs_san }}")) creates={{ ssl_certs_csr_path }
 
   - name: CSR file ownership
     file: path={{ ssl_certs_csr_path }} owner={{ ssl_certs_path_owner }} group={{ ssl_certs_path_group }} mode={{ ssl_certs_mode }}
