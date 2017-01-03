@@ -13,3 +13,5 @@ script:
 addons:
   hosts:
     - travis.dev
+notifications:
+    webhooks: https://galaxy.ansible.com/api/v1/notifications/
