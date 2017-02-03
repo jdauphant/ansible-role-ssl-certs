@@ -35,7 +35,7 @@
   - include: generate.yml
     when: >
       ( not stat_privkey.stat.exists and not stat_cert.stat.exists )
-      and ( ssl_certs_local_privkey_data is undefined and ssl_certs_local_cert_data is undefined )
+      and ( ssl_certs_local_privkey_data == '' and ssl_certs_local_cert_data == '' )
     tags: [ssl-certs,configuration]
 
   - name: Copy SSL certificates
@@ -47,7 +47,7 @@
       mode: "{{ ssl_certs_mode }}"
     when: >
       ( stat_privkey.stat.exists and stat_cert.stat.exists )
-      and ( ssl_certs_local_privkey_data is undefined and ssl_certs_local_cert_data is undefined )
+      and ( ssl_certs_local_privkey_data == '' and ssl_certs_local_cert_data == '' )
     with_items:
       - { src: "{{ ssl_certs_local_cert_path }}", dest: "{{ ssl_certs_cert_path }}" }
       - { src: "{{ ssl_certs_local_privkey_path }}", dest: "{{ ssl_certs_privkey_path }}" }
@@ -60,7 +60,8 @@
       owner: "{{ ssl_certs_path_owner }}"
       group: "{{ ssl_certs_path_group }}"
       mode: "{{ ssl_certs_mode }}"
-    when: ssl_certs_local_privkey_data is defined and ssl_certs_local_cert_data is defined
+    when: ssl_certs_local_privkey_data != ''
+          and ssl_certs_local_cert_data != ''
     with_items:
       - { content: "{{ ssl_certs_local_cert_data|default }}", dest: "{{ ssl_certs_cert_path }}" }
       - { content: "{{ ssl_certs_local_privkey_data|default }}", dest: "{{ ssl_certs_privkey_path }}" }
