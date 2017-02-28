@@ -12,7 +12,7 @@
     file: path={{ ssl_certs_csr_path }} owner={{ ssl_certs_path_owner }} group={{ ssl_certs_path_group }} mode={{ ssl_certs_mode }}
 
   - name: Generate self-signed SSL certificate
-    command: openssl req -nodes -x509 -days {{ ssl_certs_days }} -in {{ ssl_certs_csr_path }} -key {{ ssl_certs_privkey_path }} -out {{ ssl_certs_cert_path }} -extensions v3_ca creates={{ ssl_certs_cert_path }}
+    command: openssl req -nodes -x509 -sha256 -days {{ ssl_certs_days }} -in {{ ssl_certs_csr_path }} -key {{ ssl_certs_privkey_path }} -out {{ ssl_certs_cert_path }} -extensions v3_ca creates={{ ssl_certs_cert_path }}
     when: ssl_certs_generate_self_signed
 
   - name: Self-signed SSL certificate file ownership
