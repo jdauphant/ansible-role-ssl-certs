@@ -38,19 +38,30 @@
       and ( ssl_certs_local_privkey_data == '' and ssl_certs_local_cert_data == '' )
     tags: [ssl-certs,configuration]
 
-  - name: Copy SSL certificates
+  - name: Copy SSL private key file (if exists)
     copy:
-      src: "{{ item.src }}"
-      dest: "{{ item.dest }}"
+      src: "{{ ssl_certs_local_privkey_path }}"
+      dest: "{{ ssl_certs_privkey_path }}"
       owner: "{{ ssl_certs_path_owner }}"
       group: "{{ ssl_certs_path_group }}"
       mode: "{{ ssl_certs_mode }}"
+      force: no
     when: >
-      ( stat_privkey.stat.exists and stat_cert.stat.exists )
-      and ( ssl_certs_local_privkey_data == '' and ssl_certs_local_cert_data == '' )
-    with_items:
-      - { src: "{{ ssl_certs_local_cert_path }}", dest: "{{ ssl_certs_cert_path }}" }
-      - { src: "{{ ssl_certs_local_privkey_path }}", dest: "{{ ssl_certs_privkey_path }}" }
+      ( stat_privkey.stat.exists )
+      and ( ssl_certs_local_privkey_data == '' )
+    tags: [ssl-certs,configuration]
+
+  - name: Copy SSL certificate file (if exists)
+    copy:
+      src: "{{ ssl_certs_local_cert_path }}"
+      dest: "{{ ssl_certs_cert_path }}"
+      owner: "{{ ssl_certs_path_owner }}"
+      group: "{{ ssl_certs_path_group }}"
+      mode: "{{ ssl_certs_mode }}"
+      force: no
+    when: >
+      ( stat_cert.stat.exists )
+      and ( ssl_certs_local_cert_data == '' )
     tags: [ssl-certs,configuration]
 
   - name: Copy SSL certificate data
@@ -60,8 +71,8 @@
       owner: "{{ ssl_certs_path_owner }}"
       group: "{{ ssl_certs_path_group }}"
       mode: "{{ ssl_certs_mode }}"
-    when: ssl_certs_local_privkey_data != ''
-          and ssl_certs_local_cert_data != ''
+      force: no
+    when: item.content != ''
     with_items:
       - { content: "{{ ssl_certs_local_cert_data|default }}", dest: "{{ ssl_certs_cert_path }}" }
       - { content: "{{ ssl_certs_local_privkey_data|default }}", dest: "{{ ssl_certs_privkey_path }}" }
