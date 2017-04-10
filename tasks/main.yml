@@ -45,7 +45,7 @@
       owner: "{{ ssl_certs_path_owner }}"
       group: "{{ ssl_certs_path_group }}"
       mode: "{{ ssl_certs_mode }}"
-      force: no
+      force: "{{ ssl_certs_force_replace }}"
     when: >
       ( stat_privkey.stat.exists )
       and ( ssl_certs_local_privkey_data == '' )
@@ -58,7 +58,7 @@
       owner: "{{ ssl_certs_path_owner }}"
       group: "{{ ssl_certs_path_group }}"
       mode: "{{ ssl_certs_mode }}"
-      force: no
+      force: "{{ ssl_certs_force_replace }}"
     when: >
       ( stat_cert.stat.exists )
       and ( ssl_certs_local_cert_data == '' )
@@ -71,7 +71,7 @@
       owner: "{{ ssl_certs_path_owner }}"
       group: "{{ ssl_certs_path_group }}"
       mode: "{{ ssl_certs_mode }}"
-      force: no
+      force: "{{ ssl_certs_force_replace }}"
     when: item.content != ''
     with_items:
       - { content: "{{ ssl_certs_local_cert_data|default }}", dest: "{{ ssl_certs_cert_path }}" }
