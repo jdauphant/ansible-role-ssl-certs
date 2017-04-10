@@ -15,6 +15,7 @@ ssl_certs_cert_path: "{{ssl_certs_path}}/{{ssl_certs_common_name}}.pem"
 ssl_certs_csr_path: "{{ssl_certs_path}}/{{ssl_certs_common_name}}.csr"
 ssl_certs_dhparam_path: "{{ssl_certs_path}}/dhparam.pem"
 ssl_certs_mode: "0700"
+ssl_certs_force_replace: yes
 
 ssl_certs_local_privkey_path: "{{inventory_dir|default(playbook_dir)}}/files/ssl/{{ssl_certs_common_name}}.key"
 ssl_certs_local_cert_path: "{{inventory_dir|default(playbook_dir)}}/files/ssl/{{ssl_certs_common_name}}.pem"
