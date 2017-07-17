@@ -1,0 +1,4 @@
+---
+
+ssl_certs_path_owner: "apache"
+ssl_certs_path_group: "apache"
