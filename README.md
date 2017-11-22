@@ -3,7 +3,7 @@ ansible-role-ssl-certs
 
 Generate and/or deploy SSL certificate
 
-Available on Ansible Galaxy: [jdauphant.ssl-certs](https://galaxy.ansible.com/list#/roles/3115)
+Available on Ansible Galaxy: [jdauphant.ssl-certs](https://galaxy.ansible.com/jdauphant/ssl-certs/)
 
 # Examples
 
