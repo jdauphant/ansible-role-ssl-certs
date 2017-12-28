@@ -80,7 +80,7 @@
     tags: [ssl-certs,configuration]
 
   - name: Generate strong DHE parameter - https://weakdh.org/
-    command: openssl dhparam -out {{ssl_certs_dhparam_path}} {{ssl_certs_dhparam_size}} creates={{ssl_certs_dhparam_path}}
+    command: openssl dhparam -dsaparam -out {{ssl_certs_dhparam_path}} {{ssl_certs_dhparam_size}} creates={{ssl_certs_dhparam_path}}
     when: ssl_certs_generate_dh_param
     tags: [ssl-certs,configuration]
 
