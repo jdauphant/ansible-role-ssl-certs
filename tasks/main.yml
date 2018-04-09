@@ -84,3 +84,9 @@
     when: ssl_certs_generate_dh_param
     tags: [ssl-certs,configuration]
 
+  - name: Combine key and cert
+    assemble:
+      dest: "{{ ssl_certs_combined_path }}"
+      src: "{{ ssl_certs_path }}"
+      regexp: "({{ ssl_certs_privkey_path | basename }}|{{ ssl_certs_cert_path | basename }})"
+    tags: [ssl-certs,configuration]
