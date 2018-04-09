@@ -13,6 +13,7 @@ ssl_certs_path_group: "www-data"
 ssl_certs_privkey_path: "{{ssl_certs_path}}/{{ssl_certs_common_name}}.key"
 ssl_certs_cert_path: "{{ssl_certs_path}}/{{ssl_certs_common_name}}.pem"
 ssl_certs_csr_path: "{{ssl_certs_path}}/{{ssl_certs_common_name}}.csr"
+ssl_certs_combined_path: "{{ssl_certs_path}}/{{ssl_certs_common_name}}.combined.pem"
 ssl_certs_dhparam_path: "{{ssl_certs_path}}/dhparam.pem"
 ssl_certs_mode: "0700"
 ssl_certs_force_replace: yes
