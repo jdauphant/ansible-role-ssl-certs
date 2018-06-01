@@ -1,0 +1,55 @@
+[ req ]
+
+default_bits        = {{ ssl_certs_key_size }}
+default_keyfile     = {{ ssl_certs_privkey_path }}
+distinguished_name  = subject
+req_extensions      = req_ext
+x509_extensions     = x509_ext
+string_mask         = utf8only
+
+[ subject ]
+
+countryName                 = Country Name (2 letter code)
+countryName_default         = {{ ssl_certs_country }}
+
+stateOrProvinceName         = State or Province Name (full name)
+stateOrProvinceName_default = {{ ssl_certs_state }}
+
+localityName                = Locality Name (eg, city)
+localityName_default        = {{ ssl_certs_locality }}
+
+organizationName            = Organization Name (eg, company)
+organizationName_default    = {{ ssl_certs_organization }}
+
+commonName                  = Common Name (e.g. server FQDN or YOUR name)
+commonName_default          = {{ ssl_certs_common_name }}
+
+emailAddress                = Email address
+emailAddress_default        = {{ ssl_certs_email }}
+
+[ x509_ext ]
+
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid,issuer
+
+basicConstraints       = CA:FALSE
+keyUsage               = digitalSignature, keyEncipherment
+subjectAltName         = @alternate_names
+
+[ req_ext ]
+
+subjectKeyIdentifier = hash
+
+basicConstraints     = CA:FALSE
+keyUsage             = digitalSignature, keyEncipherment
+subjectAltName       = @alternate_names
+
+[ v3_ca ]
+
+basicConstraints     = CA:FALSE
+keyUsage             = digitalSignature, keyEncipherment
+subjectAltName       = @alternate_names
+
+[ alternate_names ]
+
+DNS.1       = {{ ssl_certs_common_name }}

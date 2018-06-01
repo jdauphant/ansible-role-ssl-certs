@@ -5,16 +5,25 @@
   - name: RSA key file ownership
     file: path={{ ssl_certs_privkey_path }} owner={{ ssl_certs_path_owner }} group={{ ssl_certs_path_group }} mode={{ ssl_certs_mode }}
 
+  - name: Generate certificate config file
+    template:
+      src: sslcert.conf.j2
+      dst: "{{ ssl_certs_conf_path }}"
+      owner: "{{ ssl_certs_path_owner }}"
+      group: "{{ ssl_certs_path_group }}"
+      mode: "{{ ssl_certs_mode }}"
+
   - name: Generate CSR
-    command: openssl req -new -sha256 -subj "{{ ssl_certs_fields }}" -key {{ ssl_certs_privkey_path }} -out {{ ssl_certs_csr_path }} creates={{ ssl_certs_csr_path }}
+    command: openssl req -config {{ ssl_certs_conf_path }} -new -sha256 -key {{ ssl_certs_privkey_path }} -out {{ ssl_certs_csr_path }} creates={{ ssl_certs_csr_path }}
 
   - name: CSR file ownership
     file: path={{ ssl_certs_csr_path }} owner={{ ssl_certs_path_owner }} group={{ ssl_certs_path_group }} mode={{ ssl_certs_mode }}
 
   - name: Generate self-signed SSL certificate
-    command: openssl req -nodes -x509 -sha256 -days {{ ssl_certs_days }} -in {{ ssl_certs_csr_path }} -key {{ ssl_certs_privkey_path }} -out {{ ssl_certs_cert_path }} -extensions v3_ca creates={{ ssl_certs_cert_path }}
+    command: openssl req -config {{ ssl_certs_conf_path }} -nodes -x509 -sha256 -days {{ ssl_certs_days }} -in {{ ssl_certs_csr_path }} -key {{ ssl_certs_privkey_path }} -out {{ ssl_certs_cert_path }} -extensions v3_ca creates={{ ssl_certs_cert_path }}
     when: ssl_certs_generate_self_signed
 
   - name: Self-signed SSL certificate file ownership
     file: path={{ ssl_certs_cert_path }} owner={{ ssl_certs_path_owner }} group={{ ssl_certs_path_group }} mode={{ ssl_certs_mode }}
     when: ssl_certs_generate_self_signed
+
