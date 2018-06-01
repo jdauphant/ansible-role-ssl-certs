@@ -9,7 +9,7 @@ ssl_certs_days: "365"
 ssl_certs_fields: "/C={{ssl_certs_country}}/ST={{ssl_certs_state}}/L={{ssl_certs_locality}}/O={{ssl_certs_organization}}/CN={{ssl_certs_common_name}}"
 
 ssl_certs_path: "/etc/ssl/{{ssl_certs_common_name}}"
-ssl_certs_conf_path: "{{ ssl_certs_cert_path }}/{{ ssl_certs_common_name }}.conf"
+ssl_certs_conf_path: "{{ ssl_certs_path }}/{{ ssl_certs_common_name }}.conf"
 ssl_certs_path_owner: "www-data"
 ssl_certs_path_group: "www-data"
 ssl_certs_privkey_path: "{{ssl_certs_path}}/{{ssl_certs_common_name}}.key"
