@@ -8,7 +8,7 @@
   - name: Generate certificate config file
     template:
       src: sslcert.conf.j2
-      dst: "{{ ssl_certs_conf_path }}"
+      dest: "{{ ssl_certs_conf_path }}"
       owner: "{{ ssl_certs_path_owner }}"
       group: "{{ ssl_certs_path_group }}"
       mode: "{{ ssl_certs_mode }}"
