@@ -74,7 +74,7 @@ Then simply include the role as in the first example.
 ```YAML
  - hosts: all
    roles:
-     - jdauphant.ssl-certs
+     - role: jdauphant.ssl-certs
        ssl_certs_generate_dh_param: true
      - role: jdauphant.nginx
        nginx_configs:
