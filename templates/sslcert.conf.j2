@@ -1,0 +1,46 @@
+[ req ]
+
+prompt              = no
+default_bits        = {{ ssl_certs_key_size }}
+default_keyfile     = {{ ssl_certs_privkey_path }}
+distinguished_name  = subject
+req_extensions      = req_ext
+x509_extensions     = x509_ext
+string_mask         = utf8only
+
+[ subject ]
+
+countryName                 = {{ ssl_certs_country }}
+stateOrProvinceName         = {{ ssl_certs_state }}
+localityName                = {{ ssl_certs_locality }}
+organizationName            = {{ ssl_certs_organization }}
+commonName                  = {{ ssl_certs_common_name }}
+emailAddress                = {{ ssl_certs_email }}
+
+[ x509_ext ]
+
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid,issuer
+
+basicConstraints       = CA:FALSE
+keyUsage               = digitalSignature, keyEncipherment
+subjectAltName         = @alternate_names
+
+[ req_ext ]
+
+subjectKeyIdentifier = hash
+
+basicConstraints     = CA:FALSE
+keyUsage             = digitalSignature, keyEncipherment
+subjectAltName       = @alternate_names
+
+[ v3_ca ]
+
+basicConstraints     = CA:FALSE
+keyUsage             = digitalSignature, keyEncipherment
+subjectAltName       = @alternate_names
+
+[ alternate_names ]
+
+DNS.1       = {{ ssl_certs_common_name }}
+DNS.2       = {{ ssl_certs_san_name }}
