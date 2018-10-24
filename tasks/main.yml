@@ -88,5 +88,5 @@
     assemble:
       dest: "{{ ssl_certs_combined_path }}"
       src: "{{ ssl_certs_path }}"
-      regexp: "({{ ssl_certs_privkey_path | basename }}|{{ ssl_certs_cert_path | basename }})"
+      regexp: "({{ (ssl_certs_privkey_path | basename) | regex_escape }}|{{ (ssl_certs_cert_path | basename) | regex_escape }})"
     tags: [ssl-certs,configuration]
