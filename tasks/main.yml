@@ -12,12 +12,16 @@
       mode: "{{ ssl_certs_mode }}"
     tags: [ssl-certs,configuration]
 
-  - local_action: stat path={{ ssl_certs_local_privkey_path }}
+  - name: Register privkey path
+    action: stat path={{ ssl_certs_local_privkey_path }}
+    delegate_to: localhost
     register: stat_privkey
     become: no
     tags: [ssl-certs,configuration]
 
-  - local_action: stat path={{ ssl_certs_local_cert_path }}
+  - name: Register cert path
+    action: stat path={{ ssl_certs_local_cert_path }}
+    delegate_to: localhost
     register: stat_cert
     become: no
     tags: [ssl-certs,configuration]
@@ -35,7 +39,7 @@
   - include: generate.yml
     when: >
       ( not stat_privkey.stat.exists and not stat_cert.stat.exists )
-      and ( ssl_certs_local_privkey_data == '' and ssl_certs_local_cert_data == '' )
+      and ( ssl_certs_local_privkey_data | length == 0 and ssl_certs_local_cert_data | length == 0 )
     tags: [ssl-certs,configuration]
 
   - name: Copy SSL private key file (if exists)
@@ -48,7 +52,7 @@
       force: "{{ ssl_certs_force_replace }}"
     when: >
       ( stat_privkey.stat.exists )
-      and ( ssl_certs_local_privkey_data == '' )
+      and ( ssl_certs_local_privkey_data | length == 0 )
     tags: [ssl-certs,configuration]
 
   - name: Copy SSL certificate file (if exists)
@@ -61,7 +65,7 @@
       force: "{{ ssl_certs_force_replace }}"
     when: >
       ( stat_cert.stat.exists )
-      and ( ssl_certs_local_cert_data == '' )
+      and ( ssl_certs_local_cert_data | length == 0 )
     tags: [ssl-certs,configuration]
 
   - name: Copy SSL certificate data
@@ -72,7 +76,7 @@
       group: "{{ ssl_certs_path_group }}"
       mode: "{{ ssl_certs_mode }}"
       force: "{{ ssl_certs_force_replace }}"
-    when: item.content != ''
+    when: item.content | length > 0
     with_items:
       - { content: "{{ ssl_certs_local_cert_data|default }}", dest: "{{ ssl_certs_cert_path }}" }
       - { content: "{{ ssl_certs_local_privkey_data|default }}", dest: "{{ ssl_certs_privkey_path }}" }
@@ -80,7 +84,7 @@
     tags: [ssl-certs,configuration]
 
   - name: Generate strong DHE parameter - https://weakdh.org/
-    command: openssl dhparam -dsaparam -out {{ssl_certs_dhparam_path}} {{ssl_certs_dhparam_size}} creates={{ssl_certs_dhparam_path}}
+    command: openssl dhparam -dsaparam -out {{ ssl_certs_dhparam_path }} {{ ssl_certs_dhparam_size }} creates={{ ssl_certs_dhparam_path }}
     when: ssl_certs_generate_dh_param
     tags: [ssl-certs,configuration]
 
