@@ -1,6 +1,9 @@
 ansible-role-ssl-certs
 ======================
 
+## @jdauphant : I don't have time to manage anymore this role. Don't hesitate to fork and made your own version.
+
+
 Generate and/or deploy SSL certificate
 
 Available on Ansible Galaxy: [jdauphant.ssl-certs](https://galaxy.ansible.com/jdauphant/ssl-certs/)
